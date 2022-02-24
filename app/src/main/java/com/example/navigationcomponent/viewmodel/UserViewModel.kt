@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 
 class UserViewModel(private val repository: UserRepository) : ViewModel() {
 
-    fun readAllUsers() = repository.readAllData.cachedIn(viewModelScope)
+    val readAllUsers = repository.readAllData.cachedIn(viewModelScope)
 
     fun addUser(){
         Log.d("TAG", "addUser: called")

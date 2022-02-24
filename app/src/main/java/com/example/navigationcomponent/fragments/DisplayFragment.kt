@@ -6,24 +6,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.get
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.Navigation
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.navigationcomponent.R
 import com.example.navigationcomponent.adapters.UserAdapter
 import com.example.navigationcomponent.viewmodel.UserViewModel
 import com.example.navigationcomponent.viewmodel.UserViewModelFactory
-import com.example.roomapp.data.UserDao
 import com.example.roomapp.data.UserDatabase
 import com.example.roomapp.repository.UserRepository
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.collect
 
 class DisplayFragment : Fragment() {
 
@@ -42,6 +35,7 @@ class DisplayFragment : Fragment() {
         val factory = UserViewModelFactory(repository)
         val viewModel = ViewModelProvider(this,factory).get(UserViewModel::class.java)
 
+        viewModel.addUser()
      //
 
         recyclerView.apply {
@@ -51,12 +45,12 @@ class DisplayFragment : Fragment() {
         }
 
         lifecycleScope.launchWhenStarted {
-            viewModel.readAllUsers().collectLatest {
-                Log.d("TAG", "onCreateView: collect")
+            viewModel.readAllUsers.collect {
+                Log.d("TAG", "onCreateView: collect $it")
                 pagingAdapter.submitData(it)
             }
         }
-        viewModel.addUser()
+
         return view
     }
 }

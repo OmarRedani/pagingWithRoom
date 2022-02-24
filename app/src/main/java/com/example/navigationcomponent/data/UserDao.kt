@@ -1,6 +1,6 @@
 package com.example.roomapp.data
 
-import androidx.lifecycle.LiveData
+import androidx.paging.PagingSource
 import androidx.room.*
 import com.example.roomapp.model.User
 
@@ -11,6 +11,6 @@ interface UserDao {
     suspend fun addUser(user: User)
 
     @Query("SELECT * FROM user_table ORDER BY id ASC")
-    fun readAllUsers(): List<User>
+    fun readAllUsers(): PagingSource<Int,User>
 
 }
